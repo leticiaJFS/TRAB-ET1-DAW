@@ -1,6 +1,10 @@
 package br.edu.ifsul.testes.junit;
 
+import br.edu.ifsul.modelo.Classe;
 import br.edu.ifsul.modelo.Voo;
+import br.edu.ifsul.modelo.VooAgendado;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -14,18 +18,18 @@ import static org.junit.Assert.*;
  *
  * @author Leticia-PC
  */
-public class TestePersistirVoo {
+public class TestePesistirVooAgendado {
     
     EntityManagerFactory emf;
     EntityManager em;
     
-    public TestePersistirVoo() {
+    public TestePesistirVooAgendado() {  
     }
     
     @Before
     public void setUp() {
         emf = Persistence.createEntityManagerFactory("DAW-5N1-AEROPORTO-PU");
-        em = emf.createEntityManager();   
+        em = emf.createEntityManager();
     }
     
     @After
@@ -33,20 +37,21 @@ public class TestePersistirVoo {
         em.close();
         emf.close();
     }
-    
+   
     @Test
     public void teste(){
         boolean exception = false;
         
-        try{
-            Voo v = new Voo();
-            v.setDescricao("voo de curta distância");
-            v.setTempoEstimado(15.00);
-            v.setAtivo(true);
-            v.setPeriodicidade("sei la");
+        try{ 
+            Voo v = em.find(Voo.class, 1);
+            VooAgendado va = new VooAgendado();
+            va.setAeronave("aeronave 2");
+            va.setData(new GregorianCalendar(2017, Calendar.SEPTEMBER, 18));
+            va.setTotalPassageiros(15);
+            va.setV(v);
             
             em.getTransaction().begin();
-            em.persist(v);
+            em.persist(va);
             em.getTransaction().commit();
         }catch(Exception e){
             e.printStackTrace(); // imprime todos os erros no console

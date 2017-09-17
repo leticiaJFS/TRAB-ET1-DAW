@@ -1,5 +1,6 @@
 package br.edu.ifsul.testes.junit;
 
+import br.edu.ifsul.modelo.Aeroporto;
 import br.edu.ifsul.modelo.Voo;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -14,18 +15,18 @@ import static org.junit.Assert.*;
  *
  * @author Leticia-PC
  */
-public class TestePersistirVoo {
+public class TestePersistirEscala {
     
     EntityManagerFactory emf;
     EntityManager em;
     
-    public TestePersistirVoo() {
+    public TestePersistirEscala() {
     }
     
     @Before
     public void setUp() {
         emf = Persistence.createEntityManagerFactory("DAW-5N1-AEROPORTO-PU");
-        em = emf.createEntityManager();   
+        em = emf.createEntityManager(); 
     }
     
     @After
@@ -39,11 +40,9 @@ public class TestePersistirVoo {
         boolean exception = false;
         
         try{
-            Voo v = new Voo();
-            v.setDescricao("voo de curta distância");
-            v.setTempoEstimado(15.00);
-            v.setAtivo(true);
-            v.setPeriodicidade("sei la");
+            Voo v = em.find(Voo.class, 1);
+            Aeroporto ae = em.find(Aeroporto.class, 1);
+            v.getEscalas().add(ae);
             
             em.getTransaction().begin();
             em.persist(v);

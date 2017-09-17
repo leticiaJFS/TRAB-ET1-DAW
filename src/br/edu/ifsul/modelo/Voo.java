@@ -117,6 +117,14 @@ public class Voo implements Serializable{
     public void setPeriodicidade(String periodicidade) {
         this.periodicidade = periodicidade;
     }
+
+    public List<Aeroporto> getEscalas() {
+        return escalas;
+    }
+
+    public void setEscalas(List<Aeroporto> escalas) {
+        this.escalas = escalas;
+    }
     
     
 }

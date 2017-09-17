@@ -110,6 +110,14 @@ public class Aeroporto implements Serializable{
     public void setCidade(Cidade cidade) {
         this.cidade = cidade;
     }
+
+    public List<Voo> getEscalam() {
+        return escalam;
+    }
+
+    public void setEscalam(List<Voo> escalam) {
+        this.escalam = escalam;
+    }
     
     
 }
