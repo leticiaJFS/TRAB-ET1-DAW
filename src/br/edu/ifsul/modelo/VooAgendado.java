@@ -1,15 +1,20 @@
 package br.edu.ifsul.modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -46,6 +51,8 @@ public class VooAgendado implements Serializable{
     @JoinColumn(name="voo", referencedColumnName= "id", nullable = false)
     @ForeignKey(name="fk_voo_id") // 
     private Voo v;
+    @OneToMany(mappedBy = "va", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Passagem> passagens = new ArrayList<>();
 
     public VooAgendado() {
     }
@@ -106,6 +113,16 @@ public class VooAgendado implements Serializable{
         }
         return true;
     }
+    
+    public void adicionarPassagem(Passagem obj){
+        obj.setVa(this);
+        this.passagens.add(obj);
+    }
+    
+    public void removerPassagem(int index){
+        Passagem obj = this.passagens.get(index);
+        this.passagens.remove(index);
+    }
 
     public Voo getV() {
         return v;
@@ -113,6 +130,14 @@ public class VooAgendado implements Serializable{
 
     public void setV(Voo v) {
         this.v = v;
+    }
+
+    public List<Passagem> getPassagens() {
+        return passagens;
+    }
+
+    public void setPassagens(List<Passagem> passagens) {
+        this.passagens = passagens;
     }
     
     

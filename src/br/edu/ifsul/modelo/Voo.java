@@ -4,14 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -49,10 +52,22 @@ public class Voo implements Serializable{
     @JoinTable(name="escalas", joinColumns = @JoinColumn(name = "voo", referencedColumnName = "id", nullable = false),
             inverseJoinColumns = @JoinColumn(name="aeroporto", referencedColumnName = "id", nullable = false ))
     private List<Aeroporto> escalas = new ArrayList<>();
+    @OneToMany(mappedBy = "v", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<VooAgendado> voos_agendados = new ArrayList<>();
 
     public Voo() {
     }
 
+    public void adicionarVooAgendado(VooAgendado obj){
+        obj.setV(this);
+        this.voos_agendados.add(obj);
+    }
+    
+    public void removerVooAgendado(int index){
+        VooAgendado obj = this.voos_agendados.get(index);
+        this.voos_agendados.remove(index);
+    }
+    
     @Override
     public int hashCode() {
         int hash = 5;
@@ -124,6 +139,14 @@ public class Voo implements Serializable{
 
     public void setEscalas(List<Aeroporto> escalas) {
         this.escalas = escalas;
+    }
+
+    public List<VooAgendado> getVoos_agendados() {
+        return voos_agendados;
+    }
+
+    public void setVoos_agendados(List<VooAgendado> voos_agendados) {
+        this.voos_agendados = voos_agendados;
     }
     
     
